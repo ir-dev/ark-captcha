@@ -74,6 +74,36 @@ public class CaptchaTagHelper : TagHelper
         // ⚙️ JS Wiring
         html.Append($@"
 <script>
+(function () {{
+    function init() {{
+        if (typeof ArkCaptcha === 'undefined') return;
+
+        const captcha = new ArkCaptcha({{
+            apiUrl: '{ApiUrl}',
+            imageElement: document.getElementById('{Id}_img'),
+            inputElement: document.getElementById('{Id}_input'),
+            refreshButton: document.getElementById('{Id}_refresh')
+        }});
+
+        // 🔥 Hook token update
+        const originalLoad = captcha.loadCaptcha.bind(captcha);
+
+        captcha.loadCaptcha = async function() {{
+            await originalLoad();
+            document.getElementById('{Id}_token').value = captcha.token;
+        }};
+    }}
+
+    if (typeof ArkCaptcha === 'undefined') {{
+        const s = document.createElement('script');
+        s.src = '/js/ark-captcha.js';
+        s.onload = init;
+        document.head.appendChild(s);
+    }} else {{
+        init();
+    }}
+}})();
+</script>
 (function() {{
     const captcha = new ArkCaptcha({{
         apiUrl: '{ApiUrl}',

@@ -1,0 +1,24 @@
+{
+  "name": "ark-captcha",
+  "version": "0.0.1",
+  "description": "simple library, works with the base ark server side",
+  "main": "ark-alert",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ir-dev/ark-captcha"
+  },
+  "keywords": [
+    "ark",
+    "Immanuel R",
+    "Developer",
+    "captcha",
+    "utilities",
+    "alert",
+    "toast"
+  ],
+  "author": "Immanuel R",
+  "license": "ISC"
+}
