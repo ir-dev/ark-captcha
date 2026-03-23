@@ -6,11 +6,13 @@
     <h1 class="display-4">Welcome</h1>
     <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
 </div>
+
+<h1>Default Captcha Section (Full Container Provided)</h1>
 <div>
     <img id="captchaImg" />
-<input type="text" id="captchaInput" />
-<button id="refresh">Refresh</button>
-<button id="submit">Submit</button>
+    <input type="text" id="captchaInput" />
+    <button id="refresh">Refresh</button>
+    <button id="submit">Submit</button>
 
 </div>
 <script>
@@ -19,15 +21,38 @@
     imageElement: document.getElementById("captchaImg"),
     inputElement: document.getElementById("captchaInput"),
     refreshButton: document.getElementById("refresh")
-});
+    });
 
-document.getElementById("submit").addEventListener("click", async () => {
+    document.getElementById("submit").addEventListener("click", async () => {
     const valid = await captcha.validate();
 
     if (valid) {
-        alert("Captcha correct");
+    alert("Captcha correct");
     } else {
-        alert("Captcha wrong");
+    alert("Captcha wrong");
     }
-});
+    });
 </script>
+
+<h1>No Captcha Zone Provided</h1>
+<script>
+    new ArkCaptcha({
+    apiUrl: "/ark/api/captcha"
+    });
+</script>
+
+<h1>Captcha Container Alone Provided</h1>
+<div>
+    With in my Forms
+    <div id="myCaptcha"></div>
+</div>
+<script>
+    new ArkCaptcha({
+        container: document.getElementById("myCaptcha")
+    });
+</script>
+
+<div>
+    <h1>Tag Helper</h1>
+    <ark-captcha enable-verify=true></ark-captcha>
+</div>
