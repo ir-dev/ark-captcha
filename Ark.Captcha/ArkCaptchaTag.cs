@@ -9,7 +9,7 @@ public class CaptchaTagHelper : TagHelper
     public bool EnableVerify { get; set; }
 
     public string Id { get; set; } = $"captcha_{Guid.NewGuid().ToString("N")}";
-    private static bool _styleInjected = false;
+    private static bool _styleInjected = true;
 
     public override void Process(TagHelperContext context, TagHelperOutput output)
     {
@@ -76,48 +76,57 @@ public class CaptchaTagHelper : TagHelper
         html.Append($@"
 <script>
 (function () {{
-    function init() {{
-        if (typeof ArkCaptcha === 'undefined') return;
 
+    function loadScriptOnce(src, callback) {{
+        // ✅ Already loaded
+        if (window.ArkCaptcha) {{
+            callback();
+            return;
+        }}
+
+        // ✅ Already loading
+        if (window.__arkCaptchaLoading) {{
+            window.__arkCaptchaLoading.push(callback);
+            return;
+        }}
+
+        // 🚀 First time load
+        window.__arkCaptchaLoading = [callback];
+
+        const script = document.createElement(""script"");
+        script.src = src;
+        script.onload = function () {{
+            window.__arkCaptchaLoading.forEach(cb => cb());
+            window.__arkCaptchaLoading = null;
+        }};
+
+        document.head.appendChild(script);
+    }}
+
+    function initCaptcha() {{
         const captcha = new ArkCaptcha({{
             apiUrl: '{ApiUrl}',
             imageElement: document.getElementById('{Id}_img'),
             inputElement: document.getElementById('{Id}_input'),
             refreshButton: document.getElementById('{Id}_refresh')
         }});
-
         {(EnableVerify ? @$"
         document.getElementById('{Id}_submit')
-        .addEventListener('click', async () => {{
-            const result = await captcha.validate();
-            const msg = document.getElementById('{Id}_msg');
-            if (result) {{
-                msg.textContent = '✔ Verified';
-                msg.className = 'captcha-message captcha-success';
-            }} else {{
-                msg.textContent = '✖ Invalid';
-                msg.className = 'captcha-message captcha-error';
-            }}
-        }});" : "")}
-
-        // 🔥 Hook token update
-        const originalLoad = captcha.loadCaptcha.bind(captcha);
-
-        captcha.loadCaptcha = async function() {{
-            await originalLoad();
-            document.getElementById('{Id}_token').value = captcha.token;
-        }};
+            .addEventListener('click', async () => {{
+                const result = await captcha.validate();
+                const msg = document.getElementById('{Id}_msg');
+                if (result) {{
+                    msg.textContent = '✔ Verified';
+                    msg.className = 'captcha-message captcha-success';
+                }} else {{
+                    msg.textContent = '✖ Invalid';
+                    msg.className = 'captcha-message captcha-error';
+                }}
+            }});" : "")};
     }}
-    setTimeout(() => {{
-        if (typeof ArkCaptcha === 'undefined') {{
-            const s = document.createElement('script');
-            s.src = '{ArkJsUrl}';
-            s.onload = init;
-            document.head.appendChild(s);
-        }} else {{
-            init();
-        }}
-    }}, 100)
+
+    loadScriptOnce('{ArkJsUrl}', initCaptcha);
+
 }})();
 </script>
 ");
