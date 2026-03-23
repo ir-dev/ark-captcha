@@ -1,7 +1,7 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
-<script src="js/ark-captcha.js"></script>
+@* <script src="js/ark-captcha.js"></script> *@
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>
     <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
@@ -54,5 +54,9 @@
 
 <div>
     <h1>Tag Helper</h1>
-    <ark-captcha enable-verify=true></ark-captcha>
+    <ark-captcha enable-verify=true ark-js-url="/js/ark-captcha.js"></ark-captcha>
+    <ark-captcha enable-verify=false ark-js-url="/js/ark-captcha.js"></ark-captcha>
 </div>
+<script>
+    
+</script>

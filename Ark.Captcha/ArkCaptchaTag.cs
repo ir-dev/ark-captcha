@@ -4,6 +4,7 @@ using System.Text;
 [HtmlTargetElement("ark-captcha")]
 public class CaptchaTagHelper : TagHelper
 {
+    public string ArkJsUrl { get; set; } = "https://cdn.jsdelivr.net/npm/ark-captcha@latest/ark-captcha.js";
     public string ApiUrl { get; set; } = "/ark/api/captcha";
     public bool EnableVerify { get; set; }
 
@@ -85,35 +86,8 @@ public class CaptchaTagHelper : TagHelper
             refreshButton: document.getElementById('{Id}_refresh')
         }});
 
-        // 🔥 Hook token update
-        const originalLoad = captcha.loadCaptcha.bind(captcha);
-
-        captcha.loadCaptcha = async function() {{
-            await originalLoad();
-            document.getElementById('{Id}_token').value = captcha.token;
-        }};
-    }}
-
-    if (typeof ArkCaptcha === 'undefined') {{
-        const s = document.createElement('script');
-        s.src = '/js/ark-captcha.js';
-        s.onload = init;
-        document.head.appendChild(s);
-    }} else {{
-        init();
-    }}
-}})();
-</script>
-(function() {{
-    const captcha = new ArkCaptcha({{
-        apiUrl: '{ApiUrl}',
-        imageElement: document.getElementById('{Id}_img'),
-        inputElement: document.getElementById('{Id}_input'),
-        refreshButton: document.getElementById('{Id}_refresh')
-    }});
-
-    {(EnableVerify ? @$"
-    document.getElementById('{Id}_submit')
+        {(EnableVerify ? @$"
+        document.getElementById('{Id}_submit')
         .addEventListener('click', async () => {{
             const result = await captcha.validate();
             const msg = document.getElementById('{Id}_msg');
@@ -125,6 +99,25 @@ public class CaptchaTagHelper : TagHelper
                 msg.className = 'captcha-message captcha-error';
             }}
         }});" : "")}
+
+        // 🔥 Hook token update
+        const originalLoad = captcha.loadCaptcha.bind(captcha);
+
+        captcha.loadCaptcha = async function() {{
+            await originalLoad();
+            document.getElementById('{Id}_token').value = captcha.token;
+        }};
+    }}
+    setTimeout(() => {{
+        if (typeof ArkCaptcha === 'undefined') {{
+            const s = document.createElement('script');
+            s.src = '{ArkJsUrl}';
+            s.onload = init;
+            document.head.appendChild(s);
+        }} else {{
+            init();
+        }}
+    }}, 100)
 }})();
 </script>
 ");
