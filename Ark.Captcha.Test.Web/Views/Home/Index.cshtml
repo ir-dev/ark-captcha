@@ -1,0 +1,33 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+<script src="js/ark-captcha.js"></script>
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+</div>
+<div>
+    <img id="captchaImg" />
+<input type="text" id="captchaInput" />
+<button id="refresh">Refresh</button>
+<button id="submit">Submit</button>
+
+</div>
+<script>
+    const captcha = new ArkCaptcha({
+    apiUrl: "/ark/api/captcha",
+    imageElement: document.getElementById("captchaImg"),
+    inputElement: document.getElementById("captchaInput"),
+    refreshButton: document.getElementById("refresh")
+});
+
+document.getElementById("submit").addEventListener("click", async () => {
+    const valid = await captcha.validate();
+
+    if (valid) {
+        alert("Captcha correct");
+    } else {
+        alert("Captcha wrong");
+    }
+});
+</script>

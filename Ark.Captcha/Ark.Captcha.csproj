@@ -1,0 +1,31 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <Version>0.0.1</Version>
+		<Description>Simple captcha implementation</Description>
+    <OutputType>Library</OutputType>
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+		<IsPackable>true</IsPackable>
+		<PackageIcon>ark_logo.png</PackageIcon>
+		<Authors>Immanuel R</Authors>
+		<Title>Ark's simple captcha library</Title>
+		<PackageTags>ark-rapid; captcha; Immanuel R</PackageTags>
+		<PackageReleaseNotes>convinient onliner implementaiton for captcha</PackageReleaseNotes>
+		<RepositoryUrl>https://github.com/ir-dev/ark-captcha</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
+		<RepositoryBranch>main</RepositoryBranch>
+  </PropertyGroup>
+
+  <ItemGroup>
+		<None Include="Icon\ark_logo.png" Pack="true" PackagePath="" />
+	</ItemGroup>
+  
+  <ItemGroup>
+    <PackageReference Include="SkiaSharp" Version="3.119.2" />
+  </ItemGroup>
+
+</Project>
