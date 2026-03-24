@@ -1,6 +1,6 @@
 {
   "name": "ark-captcha",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "simple library, works with the base ark server side",
   "main": "ark-alert",
   "scripts": {

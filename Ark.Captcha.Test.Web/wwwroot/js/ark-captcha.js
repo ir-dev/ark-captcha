@@ -19,9 +19,7 @@ class ArkCaptcha {
         if (!this.imageElement || !this.inputElement) {
             this.renderDefaultUI();
         }
-
         await this.loadCaptcha();
-
         if (this.refreshButton) {
             this.refreshButton.addEventListener("click", () => {
                 this.loadCaptcha();
@@ -188,6 +186,13 @@ class ArkCaptcha {
 
         const url = URL.createObjectURL(blob);
         this.imageElement.src = url;
+    }
+
+    async getValue() {
+        return {
+                token: this.token,
+                value: this.inputElement.value
+            };
     }
 
     async validate() {

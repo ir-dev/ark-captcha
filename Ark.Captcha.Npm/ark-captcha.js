@@ -14,13 +14,12 @@ class ArkCaptcha {
     }
 
     async init() {
+        this.renderCSS();
         // If elements not provided → auto render UI
         if (!this.imageElement || !this.inputElement) {
             this.renderDefaultUI();
         }
-
         await this.loadCaptcha();
-
         if (this.refreshButton) {
             this.refreshButton.addEventListener("click", () => {
                 this.loadCaptcha();
@@ -28,30 +27,7 @@ class ArkCaptcha {
         }
     }
 
-    // 🔥 Auto UI Renderer
-    renderDefaultUI() {
-        // Create container if not provided
-        if (!this.container) {
-            this.container = document.createElement("div");
-            document.body.appendChild(this.container);
-        }
-
-        this.container.classList.add("captcha-wrapper");
-
-        // Inject HTML
-        this.container.innerHTML = `
-            <div class="captcha-card">
-                <div class="captcha-header">Security Check</div>
-                <div class="captcha-image-container">
-                    <img class="captcha-img" />
-                    <button class="captcha-refresh" title="Refresh">↻</button>
-                </div>
-                <input type="text" class="captcha-input" placeholder="Enter code..." />
-                ${(this.enableVerify ? '<button class="captcha-submit">Verify</button>' : '')}
-                <div class="captcha-message"></div>
-            </div>
-        `;
-
+    renderCSS() {
         // Inject CSS once
         if (!document.getElementById("captcha-styles")) {
             const style = document.createElement("style");
@@ -148,6 +124,30 @@ class ArkCaptcha {
             `;
             document.head.appendChild(style);
         }
+    }
+    // 🔥 Auto UI Renderer
+    renderDefaultUI() {
+        // Create container if not provided
+        if (!this.container) {
+            this.container = document.createElement("div");
+            document.body.appendChild(this.container);
+        }
+
+        this.container.classList.add("captcha-wrapper");
+
+        // Inject HTML
+        this.container.innerHTML = `
+            <div class="captcha-card">
+                <div class="captcha-header">Security Check</div>
+                <div class="captcha-image-container">
+                    <img class="captcha-img" />
+                    <button class="captcha-refresh" title="Refresh">↻</button>
+                </div>
+                <input type="text" class="captcha-input" placeholder="Enter code..." />
+                ${(this.enableVerify ? '<button class="captcha-submit">Verify</button>' : '')}
+                <div class="captcha-message"></div>
+            </div>
+        `;
 
         // Bind elements
         this.imageElement = this.container.querySelector(".captcha-img");
@@ -186,6 +186,13 @@ class ArkCaptcha {
 
         const url = URL.createObjectURL(blob);
         this.imageElement.src = url;
+    }
+
+    async getValue() {
+        return {
+                token: this.token,
+                value: this.inputElement.value
+            };
     }
 
     async validate() {

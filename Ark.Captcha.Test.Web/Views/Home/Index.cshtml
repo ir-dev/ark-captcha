@@ -34,13 +34,6 @@
     });
 </script>
 
-<h1>No Captcha Zone Provided</h1>
-<script>
-    new ArkCaptcha({
-    apiUrl: "/ark/api/captcha"
-    });
-</script>
-
 <h1>Captcha Container Alone Provided</h1>
 <div>
     With in my Forms
@@ -55,8 +48,15 @@
 <div>
     <h1>Tag Helper</h1>
     <ark-captcha enable-verify=true ark-js-url="/js/ark-captcha.js"></ark-captcha>
-    <ark-captcha enable-verify=false ark-js-url="/js/ark-captcha.js"></ark-captcha>
+    <ark-captcha id="captt" enable-verify=false ark-js-url="/js/ark-captcha.js"></ark-captcha>
 </div>
 <script>
     
+</script>
+
+<h1>No Captcha Zone Provided</h1>
+<script>
+    new ArkCaptcha({
+        apiUrl: "/ark/api/captcha"
+    });
 </script>
