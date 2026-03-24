@@ -6,6 +6,9 @@ public class CaptchaTagHelper : TagHelper
 {
     public string ArkJsUrl { get; set; } = "https://cdn.jsdelivr.net/npm/ark-captcha@latest/ark-captcha.js";
     public string ApiUrl { get; set; } = "/ark/api/captcha";
+    public string Theme { get; set; } = "glass";
+    public string Size { get; set; } = "compact";
+    public string Title { get; set; } = "";
     public bool EnableVerify { get; set; }
 
     public string Id { get; set; } = $"captcha_{Guid.NewGuid().ToString("N")}";
@@ -48,9 +51,12 @@ public class CaptchaTagHelper : TagHelper
 
     function initCaptcha() {{
         document.querySelector('#{Id}').captcha = new ArkCaptcha({{
-            container: document.querySelector('#{Id}_captcha_contain'),
+            container: document.querySelector('#{Id}'),
             apiUrl: '{ApiUrl}',
-            enableVerify: {EnableVerify.ToString().ToLower()}
+            enableVerify: {EnableVerify.ToString().ToLower()},
+            theme: '{Theme}',
+            size: '{Size}',
+            title: '{Title}'
         }});
     }}
 
